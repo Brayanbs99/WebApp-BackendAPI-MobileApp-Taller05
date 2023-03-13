@@ -17,7 +17,7 @@ app.get('/movies', (req, res) => {
 });
 
 
-app.get('/movies:/:id', (req, res)=> {
+app.get('/movies/:id', (req, res)=> {
   const id = parseInt(req.params.id);
   if (movie){
     res.json(movie);
@@ -34,7 +34,26 @@ app.post('/movies', (req, res)=> {
   movie.id = uuidv4();
   movies.push(movie);
   res.json(movie);
-})
+}),
+
+app.put('/movies/:id', (req, res)=> {
+  const movie = req.body;
+  if(!movie.title || !movie.director || !movie.genre || !movie.year){
+    return res.status(400).json({ error: 'Missing required fields'});
+  }
+  movie.id = uuidv4();
+  movies.push(movie);
+  res.json(movie);
+}),
+
+app.delete('/movies/:id', (req, res)=> {
+  const id = parseInt(req.params.id);
+  if (movie){
+    res.json(movie);
+  }else{
+    res.status(404).send('Movie not found')
+  }
+});
 
 const PORT = 3001;
 app.listen(PORT, () =>{
